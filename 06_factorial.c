@@ -1,23 +1,43 @@
+
 #include <stdio.h>
 
-unsigned long long factorial_recursive(int n) {
-    if (n <= 1) return 1;
-    return (unsigned long long)n * factorial_recursive(n - 1);
-}
+long long factorial(int n)
+{
+    long long fact = 1;
+    int i;
 
-unsigned long long factorial_iterative(int n) {
-    unsigned long long result = 1;
-    for (int i = 2; i <= n; i++) result *= (unsigned long long)i;
-    return result;
-}
-
-int main(void) {
-    int n;
-    printf("Enter a non-negative integer (0-20): ");
-    if (scanf("%d", &n) != 1 || n < 0 || n > 20) {
-        printf("Please enter a number from 0 to 20.\n"); return 1;
+    for(i = 1; i <= n; i++)
+    {
+        fact = fact * i;
     }
-    printf("Factorial using recursion = %llu\n", factorial_recursive(n));
-    printf("Factorial without recursion = %llu\n", factorial_iterative(n));
+
+    return fact;
+}
+
+long long recursive(int n)
+{
+    if(n == 0 || n == 1)
+        return 1;
+
+    return n * recursive(n - 1);
+}
+
+int main()
+{
+    int n;
+
+    printf("Enter a number: ");
+    scanf("%d", &n);
+
+    if(n < 0 || n > 20)
+    {
+        printf("Enter a number between 0 and 20");
+        return 0;
+    }
+
+    printf("Factorial without recursion = %lld\n", factorial(n));
+
+    printf("Factorial with recursion = %lld\n", recursive(n));
+
     return 0;
 }
