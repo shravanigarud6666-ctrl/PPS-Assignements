@@ -1,30 +1,67 @@
+
 #include <stdio.h>
+#include <time.h>
 
-int is_leap_year(int year) {
-    return year % 400 == 0 || (year % 4 == 0 && year % 100 != 0);
-}
+int main()
+{
+    int year, month, day;
+    int days[] = {31,28,31,30,31,30,
+                  31,31,30,31,30,31};
 
-int main(void) {
-    const char *months[] = {"January", "February", "March", "April", "May", "June",
-                            "July", "August", "September", "October", "November", "December"};
-    int days[] = {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
-    int year, weekday;
-    printf("Enter year (1-9999): ");
-    if (scanf("%d", &year) != 1 || year < 1 || year > 9999) { printf("Invalid year.\n"); return 1; }
-    if (is_leap_year(year)) days[1] = 29;
-    /* In the proleptic Gregorian calendar, 1 January 1 was a Monday. Sunday = 0. */
-    int previous = year - 1;
-    weekday = (1 + previous + previous / 4 - previous / 100 + previous / 400) % 7;
-    for (int month = 0; month < 12; month++) {
-        printf("\n     %s %d\n", months[month], year);
-        printf("Su Mo Tu We Th Fr Sa\n");
-        for (int i = 0; i < weekday; i++) printf("   ");
-        for (int day = 1; day <= days[month]; day++) {
-            printf("%2d ", day);
-            weekday = (weekday + 1) % 7;
-            if (weekday == 0) printf("\n");
-        }
-        if (weekday != 0) printf("\n");
+    char *months[] = {
+        "January", "February", "March",
+        "April", "May", "June",
+        "July", "August", "September",
+        "October", "November", "December"
+    };
+
+    struct tm date;
+    
+    printf("Enter year: ");
+    scanf("%d", &year);
+
+    if(year < 1 || year > 9999)
+    {
+        printf("Invalid year");
+        return 0;
     }
+
+    if((year % 400 == 0) ||
+       (year % 4 == 0 && year % 100 != 0))
+    {
+        days[1] = 29;
+    }
+
+    for(month = 0; month < 12; month++)
+    {
+        date = (struct tm){0};
+
+        date.tm_year = year - 1900;
+        date.tm_mon = month;
+        date.tm_mday = 1;
+
+        mktime(&date);
+
+        printf("\n\n      %s %d\n", months[month], year);
+        printf("Sun Mon Tue Wed Thu Fri Sat\n");
+
+        for(day = 0; day < date.tm_wday; day++)
+        {
+            printf("    ");
+        }
+
+        for(day = 1; day <= days[month]; day++)
+        {
+            printf("%3d ", day);
+
+            if((day + date.tm_wday) % 7 == 0)
+            {
+                printf("\n");
+            }
+        }
+
+        printf("\n");
+    }
+
     return 0;
 }
