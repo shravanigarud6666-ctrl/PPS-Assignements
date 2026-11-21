@@ -1,39 +1,59 @@
-#include <stdio.h>
-#define MAX_STUDENTS 100
 
-struct Student {
+#include <stdio.h>
+
+struct student
+{
     int roll;
-    char name[100];
+    char name[50];
     int marks[3];
     int total;
-    double percentage;
+    float percentage;
 };
 
-int main(void) {
-    struct Student students[MAX_STUDENTS];
-    int count;
-    printf("Enter number of students (1-%d): ", MAX_STUDENTS);
-    if (scanf("%d", &count) != 1 || count < 1 || count > MAX_STUDENTS) {
-        printf("Invalid number of students.\n"); return 1;
+int main()
+{
+    struct student s[50];
+    int n, i, j;
+
+    printf("Enter number of students: ");
+    scanf("%d", &n);
+
+    if(n < 1 || n > 50)
+    {
+        printf("Invalid number of students");
+        return 0;
     }
-    for (int i = 0; i < count; i++) {
-        printf("\nStudent %d\nEnter roll number: ", i + 1);
-        if (scanf("%d", &students[i].roll) != 1) return 1;
+
+    for(i = 0; i < n; i++)
+    {
+        s[i].total = 0;
+
+        printf("\nEnter roll number: ");
+        scanf("%d", &s[i].roll);
+
         printf("Enter name: ");
-        if (scanf(" %99[^\n]", students[i].name) != 1) return 1;
-        students[i].total = 0;
-        for (int j = 0; j < 3; j++) {
-            printf("Enter marks for subject %d (0-100): ", j + 1);
-            if (scanf("%d", &students[i].marks[j]) != 1 || students[i].marks[j] < 0 || students[i].marks[j] > 100) {
-                printf("Invalid marks.\n"); return 1;
-            }
-            students[i].total += students[i].marks[j];
+        scanf(" %49[^\n]", s[i].name);
+
+        printf("Enter marks of 3 subjects:\n");
+
+        for(j = 0; j < 3; j++)
+        {
+            scanf("%d", &s[i].marks[j]);
+
+            s[i].total += s[i].marks[j];
         }
-        students[i].percentage = students[i].total / 3.0;
+
+        s[i].percentage = s[i].total / 3.0;
     }
-    printf("\n%-10s %-20s %8s %8s %8s %8s %11s\n", "Roll No", "Name", "Sub 1", "Sub 2", "Sub 3", "Total", "Percentage");
-    for (int i = 0; i < count; i++)
-        printf("%-10d %-20s %8d %8d %8d %8d %10.2f%%\n", students[i].roll, students[i].name,
-               students[i].marks[0], students[i].marks[1], students[i].marks[2], students[i].total, students[i].percentage);
+
+    printf("\nRoll No\tName\tTotal\tPercentage\n");
+
+    for(i = 0; i < n; i++)
+    {
+        printf("%d\t%s\t%d\t%.2f\n",
+        s[i].roll, s[i].name,
+        s[i].total, s[i].percentage);
+    }
+
     return 0;
 }
